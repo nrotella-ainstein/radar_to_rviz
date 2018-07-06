@@ -48,8 +48,11 @@ public:
 
     //send the start command to the radar
     ros::Duration(1).sleep();
-    start_radar();
-    ros::Duration(1).sleep();
+
+    //you can adjust the returns that the radar puts to the CANBUS
+    //start_radar_dual
+    //start_radar_tracked
+    start_radar_raw();
 
     //Subscribe to whatever topic is publishing Tipi CAN frames.
     //if you used 'rosrun socketcan_bridge socketcan_to_topic') it is 'received_messages'
@@ -60,7 +63,7 @@ public:
 
 
 
-  void start_radar()
+  void start_radar_tracked()
   {
     can_msgs::Frame frame;
     frame.header.frame_id = "0";
@@ -72,7 +75,53 @@ public:
     frame.id              = 256;
     frame.data[0]         = 0x01;
     frame.data[1]         = 0xff;
-    frame.data[2]         = 0xff;
+    frame.data[2]         = 0x01;
+    frame.data[3]         = 0xff;
+    frame.data[4]         = 0xff;
+    frame.data[5]         = 0xff;
+    frame.data[6]         = 0xff;
+    frame.data[7]         = 0xff;
+
+    pubRadarCommands.publish(frame);
+    ros::Duration(1).sleep();
+  }
+
+  void start_radar_raw()
+  {
+    can_msgs::Frame frame;
+    frame.header.frame_id = "0";
+    frame.header.stamp    = ros::Time::now();
+    frame.is_rtr          = false;
+    frame.is_extended     = false;
+    frame.is_error        = false;
+    frame.dlc             = 8;
+    frame.id              = 256;
+    frame.data[0]         = 0x01;
+    frame.data[1]         = 0xff;
+    frame.data[2]         = 0x02;
+    frame.data[3]         = 0xff;
+    frame.data[4]         = 0xff;
+    frame.data[5]         = 0xff;
+    frame.data[6]         = 0xff;
+    frame.data[7]         = 0xff;
+
+    pubRadarCommands.publish(frame);
+    ros::Duration(1).sleep();
+  }
+
+  void start_radar_dual()
+  {
+    can_msgs::Frame frame;
+    frame.header.frame_id = "0";
+    frame.header.stamp    = ros::Time::now();
+    frame.is_rtr          = false;
+    frame.is_extended     = false;
+    frame.is_error        = false;
+    frame.dlc             = 8;
+    frame.id              = 256;
+    frame.data[0]         = 0x01;
+    frame.data[1]         = 0xff;
+    frame.data[2]         = 0x02;
     frame.data[3]         = 0xff;
     frame.data[4]         = 0xff;
     frame.data[5]         = 0xff;
