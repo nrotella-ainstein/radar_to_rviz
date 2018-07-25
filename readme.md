@@ -13,6 +13,7 @@ Open a terminal and navigate to your catkin workspace, the following commands wi
 - rosdep install --from-paths src --ignore-src --rosdistro=kinetic -y
 - catkin_make
 - catkin_make install
+- source install/setup.bash
 
 
 For CANBUS mangement execute:
@@ -39,7 +40,7 @@ The code currently defaults to 'Raw Detections Only' output.
 
 The T-79 Short range radar has the following output options.
 
-- Raw Detections Only:  in file src/tipi_to_rviz.cpp adjust lines #53 - 55 as so:
+- Raw Detections Only:  In the file 'src/tipi_to_rviz.cpp' adjust lines #53 - 55 as so:
 ```
     //you can adjust the returns that the radar puts to the CANBUS
     //start_radar_dual();
@@ -47,7 +48,7 @@ The T-79 Short range radar has the following output options.
     start_radar_raw();
 ```
 
-- Tracked Detections Only: in file src/tipi_to_rviz.cpp adjust lines #53 - 55 as so:
+- Tracked Detections Only: In the file 'src/tipi_to_rviz.cpp' adjust lines #53 - 55 as so:
 ```
     //you can adjust the returns that the radar puts to the CANBUS
     //start_radar_dual();
@@ -55,11 +56,17 @@ The T-79 Short range radar has the following output options.
     //start_radar_raw();
 ```
 
-- Raw and Tracked Detections: in file src/tipi_to_rviz.cpp adjust lines #53 - 55 as so:
+- Raw and Tracked Detections: In file 'src/tipi_to_rviz.cpp' adjust lines #53 - 55 as so:
 ```
     //you can adjust the returns that the radar puts to the CANBUS
     start_radar_dual();
     //start_radar_tracked();
     //start_radar_raw();
 ```
+
+#### After making any adjustments you will have to recompile and source your nodes using 
+- catkin_make
+- catkin_make install
+- source install/setup.bash
+
 
