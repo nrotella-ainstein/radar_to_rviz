@@ -32,3 +32,34 @@ For Tipi (T79):
 ## Can IDs:
 
 For more detailed information concerning the CAN Frames, and CAN IDs, please reference the 'Getting Started' documentation you received with your radar.
+
+## Configuring output of 'Tracked Detections' and/or 'Raw Detections':
+*This functionality is currently only available on T-79* 
+The code currently defaults to 'Raw Detections Only' output.
+
+The T-79 Short range radar has the following output options.
+
+- Raw Detections Only:  in file src/tipi_to_rviz.cpp adjust lines #53 - 55 as so:
+```
+    //you can adjust the returns that the radar puts to the CANBUS
+    //start_radar_dual();
+    //start_radar_tracked();
+    start_radar_raw();
+```
+
+- Tracked Detections Only: in file src/tipi_to_rviz.cpp adjust lines #53 - 55 as so:
+```
+    //you can adjust the returns that the radar puts to the CANBUS
+    //start_radar_dual();
+    start_radar_tracked();
+    //start_radar_raw();
+```
+
+- Raw and Tracked Detections: in file src/tipi_to_rviz.cpp adjust lines #53 - 55 as so:
+```
+    //you can adjust the returns that the radar puts to the CANBUS
+    start_radar_dual();
+    //start_radar_tracked();
+    //start_radar_raw();
+```
+

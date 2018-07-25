@@ -50,8 +50,8 @@ public:
     ros::Duration(1).sleep();
 
     //you can adjust the returns that the radar puts to the CANBUS
-    //start_radar_dual
-    //start_radar_tracked
+    //start_radar_dual();
+    //start_radar_tracked();
     start_radar_raw();
 
     //Subscribe to whatever topic is publishing Tipi CAN frames.
@@ -121,7 +121,7 @@ public:
     frame.id              = 256;
     frame.data[0]         = 0x01;
     frame.data[1]         = 0xff;
-    frame.data[2]         = 0x02;
+    frame.data[2]         = 0x03;
     frame.data[3]         = 0xff;
     frame.data[4]         = 0xff;
     frame.data[5]         = 0xff;
