@@ -1,0 +1,17 @@
+<launch>
+  <!-- Load the car URDF for visualization and publish robot states -->
+  <arg name="model" default="$(find radar_to_rviz)/urdf/car.urdf"/>
+  <!-- <arg name="gui" default="true" /> -->
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
+  <!-- <param name="use_gui" value="$(arg gui)"/> -->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+
+  <!-- Load the rviz configurations for the different views (short and long range) -->
+  <arg name="rvizconfig_short_range" default="$(find radar_to_rviz)/rviz/car_demo_short_range.rviz" />
+  <arg name="rvizconfig_long_range" default="$(find radar_to_rviz)/rviz/car_demo_long_range.rviz" />
+
+  <!-- Run the different rviz views (short and long range) -->
+  <node name="rviz_short_range" pkg="rviz" type="rviz" args="-d $(arg rvizconfig_short_range)" required="true" />
+  <node name="rviz_long_range" pkg="rviz" type="rviz" args="-d $(arg rvizconfig_long_range)" required="true" />
+</launch>

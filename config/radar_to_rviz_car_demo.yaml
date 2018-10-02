@@ -1,0 +1,22 @@
+marker_scale_tracked: 0.5
+marker_scale_raw: 0.5
+marker_scale_bsd: 4.0
+
+use_keep_alive_thread: true
+
+use_radar_front_center_tracked: true
+use_radar_front_center_raw: true
+
+use_radar_front_left_tracked: true
+use_radar_front_left_raw: true
+
+use_radar_front_right_tracked: true
+use_radar_front_right_raw: true
+
+use_radar_rear_left_tracked: true
+use_radar_rear_left_raw: true
+use_radar_rear_left_bsd: true
+
+use_radar_rear_right_tracked: true
+use_radar_rear_right_raw: true
+use_radar_rear_right_bsd: true

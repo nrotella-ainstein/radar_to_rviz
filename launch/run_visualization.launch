@@ -1,0 +1,5 @@
+<launch>
+	<node name="socketcan_bridge_node" pkg="socketcan_bridge" type="socketcan_bridge_node" />
+	<node name="tipi_to_rviz_node" pkg="radar_to_rviz" type="tipi_to_rviz_node" />
+	<node type="rviz" name="rviz" pkg="rviz" args="-d $(find radar_to_rviz)/rviz/config.rviz" />
+</launch>

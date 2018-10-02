@@ -1,0 +1,56 @@
+<launch>
+  <!-- Load all YAML configuration parameters into rosparam server -->
+  <rosparam command="load" file="$(find radar_to_rviz)/config/radar_to_rviz_car_demo.yaml" />
+
+  <!-- Run the socketCAN node for receiving CAN frames from can0 on Tegra-A -->
+  <node name="socketcan_bridge_node_a" pkg="socketcan_bridge" type="socketcan_bridge_node" >
+    <rosparam>
+      can_device: can0
+    </rosparam>
+  </node>
+
+  <!-- Run the socketCAN node for receiving CAN frames from can1 on Tegra-B -->
+  <machine
+      name="tegra-b"
+      address="10.42.0.29"
+      user="nvidia"
+      password="nvidia"
+      timeout="5"
+      env-loader="/home/nvidia/catkin_ws/devel/remote_env_loader.sh"
+      />
+  <node
+      machine="tegra-b"
+      name="socketcan_bridge_node_b"
+      pkg="socketcan_bridge"
+      type="socketcan_bridge_node">
+    <rosparam>
+      can_device: can1
+    </rosparam>
+  </node>
+
+  <!-- Run the car demo node for processing radar CAN data into visualization messages -->
+  <node name="radar_to_rviz_car_demo_node" pkg="radar_to_rviz" type="radar_to_rviz_car_demo_node" />
+
+  <!-- Run the node to publish car data messages -->
+  <!-- <node name="car_data_pub_node" pkg="car_data_interface" type="car_data_pub_node" launch-prefix="sudo -E PYTHONPATH=$(env PYTHONPATH)" /> -->
+
+  <!-- Run rqt_console for debugging -->
+  <node name="debug_console" pkg="rqt_console" type="rqt_console" />
+  
+  <!-- Load the car URDF for visualization and publish robot states -->
+  <arg name="model" default="$(find radar_to_rviz)/urdf/car.urdf"/>
+  <!-- <arg name="gui" default="true" /> -->
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
+  <!-- <param name="use_gui" value="$(arg gui)"/> -->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+  <!-- <node pkg="tf" type="static_transform_publisher" name="chassis_broadcaster" args="-10 0 0 0 0 0 1 base_link chassis 100" /> -->
+  
+  <!-- Load the rviz configurations for the different views (short and long range) -->
+  <arg name="rvizconfig_short_range" default="$(find radar_to_rviz)/rviz/car_demo_short_range.rviz" />
+  <arg name="rvizconfig_long_range" default="$(find radar_to_rviz)/rviz/car_demo_long_range.rviz" />
+
+  <!-- Run the different rviz views (short and long range) -->
+  <node name="rviz_short_range" pkg="rviz" type="rviz" args="-d $(arg rvizconfig_short_range)" required="true" />
+  <node name="rviz_long_range" pkg="rviz" type="rviz" args="-d $(arg rvizconfig_long_range)" required="true" />
+</launch>

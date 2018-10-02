@@ -1,0 +1,73 @@
+#!/usr/bin/env python
+
+import rospy
+from panda import Panda
+from radar_to_rviz.msg import CarData
+
+wheel_speed = 0
+WS_FL = 0
+WS_FR = 0
+WS_RL = 0
+WS_RR = 0
+
+KPH_TO_MPS = 0.2778
+
+car_speed = 0
+steer_angle = 0
+steer_rate = 0
+
+def car_steer_data_pub():
+
+    # Create a set up the publisher for car data:
+    pub = rospy.Publisher( 'car_data', CarData, queue_size=10 )
+    rospy.init_node( 'car_data_pub', anonymous=True )
+    pub_rate = rospy.Rate( 10 ) # 10 Hz
+
+    # Interface to Panda:
+    panda = Panda()
+
+    # Run endlessly while ROS is running:
+    while not rospy.is_shutdown():
+
+        # Get the CAN message from the Panda:
+        data = panda.can_recv()
+        
+	# Find and parse steering angle data message:
+	for i in range( 0, len( data ) ):
+	    if data[i][0] == 342:
+                rospy.loginfo("GOT A STEERING MESSAGE")
+        	steer_data = data[i][2]
+                
+                steer_angle = ( steer_data[0] << 8 ) + steer_data[1]
+                if steer_angle > 32767:
+                    steer_angle = steer_angle - 65536
+                steer_angle = 0.1 * steer_angle
+                    
+                steer_rate = ( steer_data[2] << 8 ) + steer_data[3]
+                if steer_rate > 32767:
+                    steer_rate = steer_rate - 65536
+                steer_rate  = 1.0 * steer_rate
+                    
+            elif data[i][0] == 597:
+		wheel_speed = data[i][2]
+
+	        WS_FL = KPH_TO_MPS * wheel_speed[0]
+	        WS_FR = KPH_TO_MPS * wheel_speed[1]
+	        WS_RL = KPH_TO_MPS * wheel_speed[2]
+	        WS_RR = KPH_TO_MPS * wheel_speed[3]
+
+                car_speed = 0.25 * ( WS_FL + WS_FR + WS_RL + WS_RR )
+
+        msg = CarData()
+        msg.speed = car_speed
+        msg.steer_angle = steer_angle
+        msg.steer_rate = steer_rate
+        
+        pub.publish( msg )
+        pub_rate.sleep()
+
+if __name__ == '__main__':
+    try:
+        car_steer_data_pub()
+    except rospy.ROSInterruptException:
+        pass

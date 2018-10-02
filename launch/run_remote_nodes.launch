@@ -1,0 +1,21 @@
+<launch>
+  <machine
+      name="tegra-b"
+      address="10.42.0.29"
+      user="nvidia"
+      password="nvidia"
+      timeout="5"
+      env-loader="/home/nvidia/catkin_ws/devel/remote_env_loader.sh"
+      />
+  
+  <node
+      machine="tegra-b"
+      name="socketcan_bridge_node_b"
+      pkg="socketcan_bridge"
+      type="socketcan_bridge_node">
+    <rosparam>
+      can_device: can1
+    </rosparam>
+  </node>
+    
+</launch>

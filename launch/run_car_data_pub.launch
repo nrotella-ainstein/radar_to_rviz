@@ -1,0 +1,4 @@
+<launch>
+  <!-- Run the node to publish car data messages -->
+  <node name="car_data_pub_node" pkg="radar_to_rviz" type="car_data_pub_node" launch-prefix="sudo -E PYTHONPATH=$(env PYTHONPATH)" />
+</launch>

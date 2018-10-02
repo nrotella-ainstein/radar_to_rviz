@@ -1,0 +1,18 @@
+<launch>
+  <!-- Run the socketCAN node for receiving CAN frames from can0 on Tegra-A -->
+  <node name="socketcan_bridge_node_a" pkg="socketcan_bridge" type="socketcan_bridge_node" >
+    <rosparam>
+      can_device: can0
+    </rosparam>
+  </node>
+
+  <!-- Run the tipi_to_rviz node for processing radar CAN data into visualization messages -->
+  <node name="tipi_to_rviz_node" pkg="radar_to_rviz" type="tipi_to_rviz_node" />
+
+  <!-- Load the rviz configuration -->
+  <arg name="rvizconfig_tipi_to_rviz" default="$(find radar_to_rviz)/rviz/tipi_to_rviz.rviz" />
+
+  <!-- Run rviz -->
+  <node name="rviz_tipi_to_rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig_tipi_to_rviz)" required="true" />
+
+</launch>

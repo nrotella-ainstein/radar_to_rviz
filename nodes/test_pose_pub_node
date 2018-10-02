@@ -1,0 +1,27 @@
+#!/usr/bin/env python
+import rospy
+
+import tf
+from geometry_msgs.msg import Pose
+
+def test_pose_pub():
+
+    # Create a set up the publisher for car data:
+    pub = rospy.Publisher( 'test_pose', Pose, queue_size=10 )
+    rospy.init_node( 'test_pose_pub', anonymous=True )
+    pub_rate = rospy.Rate( 10 ) # 10 Hz
+
+    # Run endlessly while ROS is running:
+    while not rospy.is_shutdown():
+
+        msg = Pose()
+        
+        pub.publish( msg )
+        pub_rate.sleep()
+
+        
+if __name__ == '__main__':
+    try:
+        test_pose_pub()
+    except rospy.ROSInterruptException:
+        pass
